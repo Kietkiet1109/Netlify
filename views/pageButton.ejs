@@ -1,0 +1,35 @@
+<%- include("templates/header") %>
+    <div>
+        <% if (page > 1) { %>
+            <form action="/" method="get" style="display:inline;">
+                <input type="hidden" name="page" value="<%= page - 1 %>">
+                <button class="btn btn-primary d-inline-flex align-items-left">Previous</button>
+            </form>
+        <% } %>
+
+        <% 
+        let startPage = Math.max(1, page - 2);
+        let endPage = Math.min(totalPages, page + 2);
+
+        if (page <= 3) {
+            endPage = Math.min(totalPages, 5);
+        } else if (page >= totalPages - 2) {
+            startPage = Math.max(1, totalPages - 4);
+        }
+        %>
+
+        <% for (let i = startPage; i <= endPage; i++) { %>
+            <form action="/" method="get" style="display:inline;">
+                <input type="hidden" name="page" value="<%= i %>">
+                <button <% if (i === page) { %> style="background-color: yellowgreen;" <% } %>><%= i %></button>
+            </form>
+        <% } %>
+
+        <% if (page < totalPages) { %>
+            <form action="/" method="get" style="display:inline;">
+                <input type="hidden" name="page" value="<%= page + 1 %>">
+                <button class="btn btn-primary d-inline-flex align-items-left">Next</button>
+            </form>
+        <% } %>
+    </div>
+<%- include("templates/footer") %>

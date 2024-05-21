@@ -1,0 +1,56 @@
+<%- include("templates/header") %> 
+    <div class="popup-content">
+        <div class="popup-header">
+            <div class="row row-cols-2">
+                <div class="col">
+                    <h5 id="popup-title">
+                        <h2><%= pokemon.name %></h2>
+                        <h5><%= pokemon.id %></h5>
+                    </h5>
+                </div>
+                <div class="col d-flex justify-content-end">
+                    <form action="/" method="get">
+                        <button class="btn btn-secondary rounded-pill px-3" id="close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="popup-body">
+            <img src="<%= pokemon.sprites.front_default %>" style="width:200px">
+            <div>
+                <h3>Abilities</h3>
+                <ul>
+                <% pokemon.abilities.forEach(a => { %>
+                    <li><%= a.ability.name %></li>
+                <% }) %>
+                </ul>
+            </div>
+
+            <div>
+                <h3>Stats</h3>
+                <ul>
+                    <% pokemon.stats.forEach(s => { %>
+                        <li><%= s.stat.name %>: <%= s.base_stat %></li>
+                    <% }) %>
+                </ul>
+            </div>
+
+            <div>
+                <h3>Types</h3>
+                <ul>
+                    <% pokemon.types.forEach(t => { %>
+                        <li><%= t.type.name %></li>
+                    <% }) %>
+                </ul>
+            </div>
+
+        <div class="popup-footer d-flex justify-content-end">
+            <form action="/" method="get">
+                <button class="btn btn-secondary rounded-pill px-3" id="close">Close</button>
+            </form>
+        </div>
+    </div>
+<%- include("templates/footer") %>

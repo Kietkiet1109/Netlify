@@ -1,0 +1,16 @@
+<%- include("templates/header") %> 
+    <form action="/filter" method="get">
+        <%- include('filter', {types: types}) %>
+    </form>
+    <h1>Showing <%= limit %> of <%= max %> pokemons</h1>
+    <div class="container">
+        <div class="row row-cols-5">
+            <% pokemons.forEach(pokemon => { %>
+                <%- include('templates/pokeCard', {pokemon: pokemon}) %>    
+            <% }) %>
+        </div>
+    </div>
+    <div id="pageButton">   
+        <%- include('pageButton', {page: page, totalPages: totalPages}) %>
+    </div>
+<%- include("templates/footer") %> 

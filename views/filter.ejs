@@ -1,0 +1,11 @@
+<%- include("templates/header") %>
+    <div id="filter">
+        <% types.forEach(type => { %>
+            <label>
+                <input type="checkbox" name="type" value="<%= type.name %>">
+                <%= type.name %>
+            </label>
+        <% }) %>
+        <button type="submit" class="btn btn-primary" id="filterButton">Filter</button>
+    </div>
+<%- include("templates/footer") %> 
