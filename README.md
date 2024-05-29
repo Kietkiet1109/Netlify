@@ -1,75 +1,76 @@
-# Assignment 3 - Pokedex I : A Web App to View and Filter Pokemon
+# Project Title
+FreshStock
 
 
-# Demo Link
-https://incomparable-swan-4cb161.netlify.app/
+## 1. Project Description
 
-# Instructions
-Objective: The objective of this assignment is to design and develop a web application that allows users to view a list of all the Pokémon, filter them by type, navigate through the list, and get more information about a specific Pokémon.
+## 2. About Us
+Team Name: BBY-20
+Team Members: 
+- Person 1 Tommy tianze823242895@gmail.com
+* Hi, I am Tommy.
+- Person 2 Kiet ngkiet1109@gmail.com
+* I'm Kiet.
+- Person 3 Phuong lttphuong7@gmail.com
+* Hi, I'm Phuong.
+- Person 4 Nam Anh nle48@my.bcit.ca
+* Hi, I'm Nam Anh.
 
-# User Stories:
-
-1.  As a user, I want to see a list of all the Pokémon available, so that I can choose the one I want to know more about.
-2.  As a user, I want to filter the Pokémon by their type, so that I can easily find the ones with specific characteristics.
-2.  As a user, I want to see a limited number of Pokémon at a time and have the ability to navigate between them, so that I don't get overwhelmed by a large list.
-3.  As a user, I want to see the total number of Pokémon and the number of Pokémon being displayed, so that I can keep track of the amount of data being displayed.
-5.  As a user, I want to see more information about a Pokémon when I click on it, so that I can learn more about it.
-
-Requirements:
-
-1.  The web app should have a homepage that displays a list of all the Pokémon available.
-2.  The web app should have a filter option that allows users to filter the Pokémon by type.
-3.  The web app should have a pagination feature that allows users to navigate through the list.
-4.  The web app should display the total number of Pokémon and the number of Pokémon being displayed.
-5.  The web app should display more information about a specific Pokémon when the user clicks on it.
-
-<!-- # Deliverables:
-1.  [text link] Short YT video (1-2 minutes) that demonstrates the working of the web app. Use user stories to demonstrate the features of the web app.
-2.  [text] Self-Evaluation (see Sample below).
-3.  [Zip link] GitHub ClassRoom link of your source code. -->
-   
-
-
-# Rubric [Out of 50]:
-10 items x 5 marks each = 50 marks
-- [complete/incomplete] Fetch all pokemons names from the API and Create a pokemon card for each pokemon  
-- [complete/incomplete] Display the pokemon's details in the modal
-- [complete/incomplete] Pagination - All pokemons are accessible through the pagination buttons
-- [complete/incomplete] Pagination - Display only at max 5 pages at a time
-- [complete/incomplete] Pagination - Display the next and previous buttons  
-- [complete/incomplete] Pagination - Highlight the current page's button and
-- [complete/incomplete] Pagination - Hide the next and previous buttons when there is no next or previous page
-- [complete/incomplete] Pagination - Display total number of Pokémons and the number of Pokémon being displayed
-- [complete/incomplete] Filtration - Fetch the Pokémon types from the API and display them in a checkbox group  
-- [complete/incomplete] Filter the Pokémon cards based on the selected types
+## 3. Basic Setup (Test Locally)
+1. npm init (all defaults are fine)
+2. npm install
+3. npm install express
+4. npm install bcrypt
+5. npm install express-session
+6. npm install connect-mongo
+7. npm install dotenv
+8. npm install ejs
+9. npm install joi
+10. npm install mongodb
+	
+## 4. Technologies and Resources Used
+List technologies (with version numbers), API's, icons, fonts, images, media or data sources, and other resources that were used.
+* HTML, CSS, JavaScript
+* Bootstrap 5.0 (Frontend library)
+* Firebase 8.0 (BAAS - Backend as a Service)
+* Google maps API
+* Google Fonts
+* Material Icons
+* YouTube tutorials (Maksim: https://www.youtube.com/watch?v=UFD4SP91tSM&t=5427s, https://www.youtube.com/watch?v=CxgOKJh4zWE&t=1s, https://www.youtube.com/playlist?list=PLhPyEFL5u-i3uKNMHSDFx0_EqWiiPsvLk) 
+* SweetAlert2
+* ChatGPT (Maksim: I used ChatGPT to fix some bugs and to help me with Google Maps API) 
+* W3Schools (Tommy: https://www.w3schools.com/html/tryit.asp?filename=tryhtml_input_date, https://www.w3schools.com/bootstrap5/index.php/index.php)
+* MDN (Tommy: https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+* Bootanipp (Tommy: https://bootsnipp.com/tags/profile/4)
 
 
-# Self-Evaluation Sample [40/50]:
-- [complete] Fetch all pokemons names from the API and Create a pokemon card for each pokemon  
-- [complete] Display the pokemon's details in the modal
-- [complete] Pagination - Get The All the pages buttons
-- [complete] Pagination - Display only at max 5 pages at a time
-- [complete] Pagination - Display the next and previous buttons  
-- [complete] Pagination - Highlight the current page's button and
-- [complete] Pagination - Hide the next and previous buttons when there is no next or previous page
-- [incomplete] Pagination - Display total number of Pokémons and the number of Pokémon being displayed
-- [complete] Filtration - Fetch the Pokémon types from the API and display them in a checkbox group  
-- [incomplete] Filter the Pokémon cards based on the selected types
 
-You will be penalized  for 
-- Improper/missing incremental atomic GIT commits, 
-- Missing deliverables, and/or 
-- Late submission.
+## 5. Complete setup/installion/usage
+State what a user needs to do when they come to your project.  How do others start using your code or application?
+Here are the steps ...
+* 1 - If users are using Savebites for the first time, they will need to click "Start" then register for a new acocunt following the standard Google sign-in interface
+* 2 - Once the users have logged in, they are already good to go to start using Savebites.
+* 3 - Reommendation after logging in: Check out the Home Page for hot deals and start liking, or adding it to your Favourites list.
+* 4 - Also consider uploading a post for any hot deals you may have found and give back to the community.
 
-<!-- ## Development Strategy/Hint  
-1.  Design the wireframe and plan the development process.   
-2.  Develop the web app and implement the features mentioned in the user stories.  
-3.  Test the web app, fix bugs, and prepare the YT demo.   -->
 
-# References
-- Use the Pokémon API - https://pokeapi.co/ to fetch the data.
-  - GET all the pokemon: `https://pokeapi.co/api/v2/pokemon?limit=810`
-  - GET a specific pokemon: `https://pokeapi.co/api/v2/pokemon/{id or name}/`
-  - GET all the pokemon types: `https://pokeapi.co/api/v2/type/`
-- You may use any CSS framework of your choice.
-- You may use any JavaScript framework of your choice.
+
+## 6. Known Bugs and Limitations
+Here are some known bugs:
+* When a user tries to take a picture with the camera on user's device, the file isn't being saved in the firebase, so it is not showing in the uploaded post. (Camera button is hidden now)
+* Map does not default to the closest Safeway, Save-On-Foods, etc.
+* Map's icon results is not clickable.
+
+
+
+## 7. Features for Future
+What we'd like to build in the future:
+* Fix mobile camera so users can upload a photo they directly with the phone camera
+* Make Map more interactive by allowing it to add a location via touch as opposed to text only.
+* We are going to use more Bootstrap libraries in the future to create more animation and beautiful effect to decorate our UI.
+* Automatically hide posts on Home Page if the deal has expired.
+* Automatically hide posts with a large amount of dislikes.
+* Add OCR features so fields are automatically filled in the Upload Posts page.
+
+	
+## 8. Contents of Folder
