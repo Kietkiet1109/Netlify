@@ -18,26 +18,30 @@ const googleProvider = new GoogleAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
 
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // Add event listener to the Google Sign Up button
-    document.getElementById('signup-google').addEventListener('click', () => {
-        signInWithPopup(auth, googleProvider)
+
+    // Function to handle signup with popup and retry logic
+    function signUpAndRetry(provider, delay) {
+        signInWithPopup(auth, provider)
         .then((result) => {
-            // This gives you a Google Access Token. You can use it to access the Google API.
-            const credential = GoogleAuthProvider.credentialFromResult(result);
+
+            // Gives the Google or Facebook Access Token
+            const credential = provider === googleProvider 
+                ? GoogleAuthProvider.credentialFromResult(result)
+                : FacebookAuthProvider.credentialFromResult(result);
             const token = credential.accessToken;
-                
+            
             // The signed-in user info.
             const user = result.user;
             const name = user.displayName;
             const email = user.email;
-            const pass = "freshstock" // Default Password for Google sign-ins
+            const pass = user.password || "freshstock"; // Default Password for Google signup
 
             // Send the user data to your server
             fetch('/signupSubmit', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
                 },
                 body: JSON.stringify({
                     name: name,
@@ -45,46 +49,31 @@ document.addEventListener('DOMContentLoaded', () => {
                     password: pass 
                 })
             })
-            .then(() => {
-                // Redirect to the connection page
-                window.location.href = "/connection";
-            });
-        }).catch((error) => {
-            console.error(error);
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = "/connection"; // Redirect connection if success
+                } else {
+                    alert("Can't create user");
+                }
+            })
         })
+        .catch((error) => {
+            if (error.code === 'auth/popup-closed-by-user') {
+                setTimeout(() => {
+                    signUpAndRetry(provider, delay);
+                }, delay)
+            }
+        });
+    }
+
+    // Add event listener to the Google Sign Up button
+    document.getElementById('signup-google').addEventListener('click', () => {
+        signUpAndRetry(googleProvider, 1000)
     });
 
     // Add event listener to the Facebook Sign Up button
     document.getElementById('signup-facebook').addEventListener('click', () => {
-        signInWithPopup(auth, facebookProvider)
-        .then((result) => {
-            
-            // This gives you a Facebook Token. You can use it to access the Facebook API.
-            const credential = FacebookAuthProvider.credentialFromResult(result);
-            const token = credential.accessToken;
-                
-            // The signed-in user info.
-            const user = result.user;
-            const name = user.displayName;
-            const email = user.email;
-            const pass = "freshstock" // Default Password for Facebook sign-ins
-
-            // Send the user data to your server
-            fetch('/signupSubmit', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    name: name,
-                    email: email,
-                    password: pass 
-                })
-            })
-            .then(() => {
-                // Redirect to the connection page
-                window.location.href = "/connection";
-            })
-        })
+        signUpAndRetry(facebookProvider, 1000)
     });
 });

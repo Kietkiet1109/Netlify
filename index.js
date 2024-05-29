@@ -140,8 +140,13 @@ app.post('/signupSubmit', async (req, res) => {
 
   const validationResult = schema.validate({ name, email, password });
   if (validationResult.error != null) {
-    res.render("signupSubmit", { error: validationResult.error.details[0].message });
-    return;
+      if (req.headers['x-requested-with'] === 'XMLHttpRequest') {
+          // Handle AJAX request
+          return res.json({ success: false });
+      } else {
+          // Handle regular form submission
+          return res.render("signupSubmit", { error: validationResult.error.details[0].message });
+      }
   }
 
   var hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -155,8 +160,13 @@ app.post('/signupSubmit', async (req, res) => {
   };
   req.session.user_type = 'user';
   req.session.cookie.maxAge = expireTime;
-
-  res.redirect("/connection");
+  if (req.headers['x-requested-with'] === 'XMLHttpRequest') {
+    // Handle AJAX request
+    return res.json({ success: true });
+  } else {
+    // Handle regular form submission
+    return res.redirect("/connection");
+  }
 });
 
 app.get('/login', (req, res) => {

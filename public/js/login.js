@@ -13,19 +13,27 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const auth = getAuth();
+const auth = getAuth(); 
 const googleProvider = new GoogleAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Add event listener to the Google Login button
-    document.getElementById('login-google').addEventListener('click', () => {
-        signInWithPopup(auth, googleProvider)
+
+    // Function to handle signup with popup and retry logic
+    function logInAndRetry(provider, delay) {
+        signInWithPopup(auth, provider)
         .then((result) => {
+
+            // Gives the Google or Facebook Access Token
+            const credential = provider === googleProvider 
+                ? GoogleAuthProvider.credentialFromResult(result)
+                : FacebookAuthProvider.credentialFromResult(result);
+            const token = credential.accessToken;
+            
             // The signed-in user info.
             const user = result.user;
             const email = user.email;
-            const pass = "freshstock"; // Default Password for Google login
+            const pass = user.password || "freshstock"; // Default Password for Google signup
 
             // Send the user data to your server
             fetch('/loggingin', {
@@ -42,47 +50,28 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    window.location.href = "/home"; // Redirect to homepage if success
+                    window.location.href = "/home"; // Redirect to homePage if success
                 } else {
-                    alert("User not found"); // Show the alert if fail
+                    alert("User not found");
                 }
             })
-        }).catch((error) => {
-            console.error(error);
         })
+        .catch((error) => {
+            if (error.code === 'auth/popup-closed-by-user') {
+                setTimeout(() => {
+                    logInAndRetry(provider, delay);
+                }, delay)
+            }
+        });
+    }
+
+    // Add event listener to the Google Sign Up button
+    document.getElementById('login-google').addEventListener('click', () => {
+        logInAndRetry(googleProvider, 1000)
     });
 
-    // Add event listener to the Facebook Login button
+    // Add event listener to the Facebook Sign Up button
     document.getElementById('login-facebook').addEventListener('click', () => {
-        signInWithPopup(auth, facebookProvider)
-        .then((result) => {
-            // The signed-in user info.
-            const user = result.user;
-            const email = user.email;
-            const pass = "freshstock"; // Default Password for Facebook login
-
-            // Send the user data to your server
-            fetch('/loggingin', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                    body: JSON.stringify({
-                    email: email,
-                    password: pass 
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    window.location.href = "/home"; // Redirect to homepage if success
-                } else {
-                    alert("User not found"); // Show the alert if fail
-                }
-            })
-        }).catch((error) => {
-            console.error(error);
-        });
-    })
+        logInAndRetry(facebookProvider, 1000)
+    });
 });
