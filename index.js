@@ -189,8 +189,12 @@ app.post("/loggingin", async (req, res) => {
     .project({ name: 1, email: 1, password: 1, _id: 1, user_type: 1 })
     .toArray();
   if (result.length != 1) {
-    res.render("loggingin", { error: "User not found" });
-    return;
+    if (req.headers['x-requested-with'] === 'XMLHttpRequest') {
+      return res.json({ success: false });
+    } else {
+      // Handle regular form submission
+      return res.render("loggingin", { error: "User not found" });
+    }
   }
   if (await bcrypt.compare(password, result[0].password)) {
     req.session.authenticated = {
@@ -199,13 +203,22 @@ app.post("/loggingin", async (req, res) => {
     };
     req.session.user_type = result[0].user_type;
     req.session.cookie.maxAge = expireTime;
-    res.redirect("/home");
-    return;
+    if (req.headers['x-requested-with'] === 'XMLHttpRequest') {
+      // Handle AJAX request
+      return res.json({ success: true });
+    } else {
+      // Handle regular form submission
+      return res.redirect("/home");
+    }
   } else {
-    res.render("loggingin", { error: "Incorrect password" });
-    return;
+    if (req.headers['x-requested-with'] === 'XMLHttpRequest') {
+      // Handle AJAX request
+      return res.json({ success: false });
+    } else {
+      // Handle regular form submission
+      return res.render("loggingin", { error: "Incorrect password" });
+    }
   }
-
 });
 
 // =====connection page begins=====

@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 // Your Firebase configuration
 const firebaseConfig = {
@@ -14,13 +14,14 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(); 
-const provider = new GoogleAuthProvider();
+const googleProvider = new GoogleAuthProvider();
+const facebookProvider = new FacebookAuthProvider();
 
 document.addEventListener('DOMContentLoaded', () => {
     
     // Add event listener to the Google Sign Up button
     document.getElementById('signup-google').addEventListener('click', () => {
-        signInWithPopup(auth, provider)
+        signInWithPopup(auth, googleProvider)
         .then((result) => {
             // This gives you a Google Access Token. You can use it to access the Google API.
             const credential = GoogleAuthProvider.credentialFromResult(result);
@@ -44,17 +45,46 @@ document.addEventListener('DOMContentLoaded', () => {
                     password: pass 
                 })
             })
-        }).then(() => {
-            // Redirect to the connection page
-            window.location.href = "/connection";
-            // }).catch((error) => {
-            //     // Handle Errors here.
-            //     const errorCode = error.code;
-            //     const errorMessage = error.message;
-            //     // The email of the user's account used.
-            //     const email = error.customData.email;
-            //     // The AuthCredential type that was used.
-            //     const credential = GoogleAuthProvider.credentialFromError(error);
-        });
+            .then(() => {
+                // Redirect to the connection page
+                window.location.href = "/connection";
+            });
+        }).catch((error) => {
+            console.error(error);
+        })
+    });
+
+    // Add event listener to the Facebook Sign Up button
+    document.getElementById('signup-facebook').addEventListener('click', () => {
+        signInWithPopup(auth, facebookProvider)
+        .then((result) => {
+            
+            // This gives you a Facebook Token. You can use it to access the Facebook API.
+            const credential = FacebookAuthProvider.credentialFromResult(result);
+            const token = credential.accessToken;
+                
+            // The signed-in user info.
+            const user = result.user;
+            const name = user.displayName;
+            const email = user.email;
+            const pass = "freshstock" // Default Password for Facebook sign-ins
+
+            // Send the user data to your server
+            fetch('/signupSubmit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: name,
+                    email: email,
+                    password: pass 
+                })
+            })
+            .then(() => {
+                // Redirect to the connection page
+                window.location.href = "/connection";
+            })
+        })
     });
 });
