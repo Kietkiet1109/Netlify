@@ -20,44 +20,41 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Add event listener to the Google Sign Up button
     document.getElementById('signup-google').addEventListener('click', () => {
-        setTimeout(() => {
-            signInWithRedirect(auth, provider);
-            getRedirectResult(auth)
-            .then((result) => {
-                // This gives you a Google Access Token. You can use it to access the Google API.
-                const credential = GoogleAuthProvider.credentialFromResult(result);
-                const token = credential.accessToken;
+        signInWithPopup(auth, provider)
+        .then((result) => {
+            // This gives you a Google Access Token. You can use it to access the Google API.
+            const credential = GoogleAuthProvider.credentialFromResult(result);
+            const token = credential.accessToken;
                 
-                // The signed-in user info.
-                const user = result.user;
-                const name = user.displayName;
-                const email = user.email;
-                const pass = "freshstock" // Default Password for Google sign-ins
+            // The signed-in user info.
+            const user = result.user;
+            const name = user.displayName;
+            const email = user.email;
+            const pass = "freshstock" // Default Password for Google sign-ins
 
-                // Send the user data to your server
-                fetch('/signupSubmit', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        name: name,
-                        email: email,
-                        password: pass 
-                    })
+            // Send the user data to your server
+            fetch('/signupSubmit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: name,
+                    email: email,
+                    password: pass 
                 })
-            }).then(() => {
-                // Redirect to the connection page
-                window.location.href = "/connection";
-            }).catch((error) => {
-                // Handle Errors here.
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                // The email of the user's account used.
-                const email = error.customData.email;
-                // The AuthCredential type that was used.
-                const credential = GoogleAuthProvider.credentialFromError(error);
-            });
-        }, 500);
+            })
+        }).then(() => {
+            // Redirect to the connection page
+            window.location.href = "/connection";
+            // }).catch((error) => {
+            //     // Handle Errors here.
+            //     const errorCode = error.code;
+            //     const errorMessage = error.message;
+            //     // The email of the user's account used.
+            //     const email = error.customData.email;
+            //     // The AuthCredential type that was used.
+            //     const credential = GoogleAuthProvider.credentialFromError(error);
+        });
     });
 });
